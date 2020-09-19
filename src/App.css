@@ -55,10 +55,10 @@ p {
 }
 
 button {
-  padding: 5px;
+  padding: 8px;
   color: #0072CE;
   border-radius: 10px;
-  border: 3px solid #0072CE;
+  border: 2px solid #0072CE;
 }
 
 button:hover {
