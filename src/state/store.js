@@ -11,7 +11,10 @@ import React, { createContext, useReducer } from 'react'
 const initialState = {
     app: {
         mounted: false,
-        login: false,
+        preserved: true,
+        nested: {
+            mounted: false,
+        }
     },
     near: {}
 }
@@ -19,16 +22,23 @@ const initialState = {
 const store = createContext(initialState)
 const { Provider } = store
 
-const updateProp = (newState, newPropState, prop) => {
-    Object.keys(newState).forEach((k) => {
-        if (k === prop) {
-            newState[k] = { ...newState[k], ...newPropState}
-            return
-        }
-        if (typeof newState[k] === 'object') {
-            return updateProp(newState[k], newPropState, prop)
-        }
-    })
+
+/********************************
+find deeply nested state via dot notation
+e.g. app.nav.drawer = { isVisible: true } is what we want by calling
+update({ isVisible: true }, 'app.nav.drawer')
+********************************/
+const updateProp = (newState, newPropState, prop = '') => {
+    if (prop.length === 0) return
+    prop = prop.split('.')
+    const path = Object.keys(newState).find((k) => prop[0] === k)
+    if (!path) {
+        console.warn('path not found', path)
+    }
+    if (prop.length > 1) {
+        return updateProp(newState[path], newPropState, prop.slice(1).join('.'))
+    }
+    newState[path] = { ...newState[path], ...newPropState}
 }
 
 const StateProvider = ({ children }) => {

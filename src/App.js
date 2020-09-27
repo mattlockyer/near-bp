@@ -16,6 +16,8 @@ const App = () => {
         await dispatch(initNear())
     }
     useEffect(onMount, [])
+
+    console.log(state)
     
     const signedInFlow = async () => {
         if (!state.near.contract || state.app.login) return

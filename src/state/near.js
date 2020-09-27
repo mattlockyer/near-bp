@@ -4,6 +4,12 @@ import * as nearlib from 'near-api-js';
 export const initNear = () => async (state, dispatch) => {
     dispatch({ mounted: true }, 'app')
 
+    dispatch({ mounted: true })
+    dispatch({ mounted: true }, 'app')
+    dispatch({ mounted: true }, 'app.nested')
+    dispatch({ notInitial: {  mounted: false } }, 'app.nested')
+    dispatch({ mounted: true }, 'app.nested.notInitial')
+
     // Initializing connection to the NEAR DevNet.
     const nearConfig = getConfig(process.env.NODE_ENV || 'development')
     const near = await nearlib.connect(Object.assign({ deps: { keyStore: new nearlib.keyStores.BrowserLocalStorageKeyStore() } }, nearConfig));
